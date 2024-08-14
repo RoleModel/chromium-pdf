@@ -18,7 +18,7 @@ module Chromium
       Dir.mktmpdir do |path|
         filepath = "#{path}/#{filename}"
 
-        system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url} 2> /dev/null"
+        system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url} 2> /dev/null")
 
         File.open(filepath) do |file|
           yield file, filename
