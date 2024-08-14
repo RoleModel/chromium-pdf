@@ -8,7 +8,7 @@ module Chromium
     module Generators
       class InstallGenerator < Rails::Generators::Base
         def create_assets_rake_tasks
-          create_file "lib/tasks/assets.rake", <<~RAKE
+          create_file 'lib/tasks/assets.rake', <<~RAKE
             # frozen_string_literal: true
 
             namespace :assets do

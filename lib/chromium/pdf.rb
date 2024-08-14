@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'railtie'
+require_relative 'railtie' if defined?(Rails::Railtie)
 require_relative 'pdf/version'
 
 module Chromium
