@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "pdf/version"
+require_relative 'pdf/version'
 
 module Chromium
   module Pdf
-
     ##
     # @param unescaped_filename [String] The filename to save the PDF as.
     # @param print_url [String] The URL of the page you want to be processed.
@@ -18,7 +17,7 @@ module Chromium
       Dir.mktmpdir do |path|
         filepath = "#{path}/#{filename}"
 
-        system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url} 2> /dev/null"
+        system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url}")
 
         File.open(filepath) do |file|
           yield file, filename
