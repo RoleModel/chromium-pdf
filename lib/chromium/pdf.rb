@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "pdf/version"
+require_relative 'pdf/version'
 
 module Chromium
   module Pdf
-
     ##
     # @param unescaped_filename [String] The filename to save the PDF as.
     # @param print_url [String] The URL of the page you want to be processed.

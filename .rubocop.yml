@@ -1,8 +1,78 @@
 AllCops:
-  TargetRubyVersion: 3.0
+  Exclude:
+    - bin/**/*
+    - db/**/*
+    - vendor/**/*
+    - config/**/*
+    - tmp/**/*
+    - env.rb
+  NewCops: enable
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
+Metrics:
+  Severity: refactor
 
-Style/StringLiteralsInInterpolation:
-  EnforcedStyle: double_quotes
+# Hard to make this pass always and want to keep flexibility
+Layout/ArrayAlignment:
+  Enabled: false
+
+# Best Practices for readability
+Layout:
+  Severity: refactor
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Lint/UnusedMethodArgument:
+  Severity: refactor
+  AutoCorrect: false
+
+Lint/UnusedBlockArgument:
+  Severity: refactor
+  AutoCorrect: false
+
+Lint/UselessAssignment:
+  Severity: refactor
+  AutoCorrect: false
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
+
+Lint/Loop:
+  Enabled: false
+
+Lint/SuppressedException:
+  Enabled: false
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
+
+Style:
+  Severity: refactor
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+# It is ok to use inject at times
+Style/EachWithObject:
+  Enabled: false
