@@ -10,7 +10,3 @@ What changed in this PR?
 * [ ] Change 1
 * [ ] Change 2
 * [ ] ...
-
-## Screenshots
-
-If any UI changes need to be shown off, please add screenshots here.
