@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/RoleModel/chromium-pdf'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.0.0'
+  spec.description = 'Add support for generating PDFs with chrome to a rails app'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -21,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/RoleModel/chromium-pdf'
-  spec.metadata['changelog_uri'] = 'https://github.com/RoleModel/chromium-pdf'
+  spec.metadata['changelog_uri'] = 'https://github.com/RoleModel/chromium-pdf/blob/main/CHANGELOG.md'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
