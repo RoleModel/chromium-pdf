@@ -43,7 +43,13 @@ module Chromium
           data['buildpacks'] ||= []
 
           yield data
-          File.write(file_name, ActiveSupport::JSON.encode(data))
+
+          File.write(file_name, pretty_json(data))
+        end
+
+        def pretty_json(data)
+          require 'json'
+          JSON.pretty_generate(data)
         end
       end
     end
