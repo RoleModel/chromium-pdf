@@ -35,7 +35,13 @@ module Chromium
         end
 
         def update_json_file(file_name)
-          data = ActiveSupport::JSON.decode(File.read(file_name))
+          data = if File.exist?(file_name)
+                   ActiveSupport::JSON.decode(File.read(file_name))
+                 else
+                   {}
+                 end
+          data['buildpacks'] ||= []
+
           yield data
           File.write(file_name, ActiveSupport::JSON.encode(data))
         end

@@ -9,10 +9,6 @@ class InstallGeneratorTest < Rails::Generators::TestCase
   destination File.expand_path('../../tmp', __dir__)
   setup do
     prepare_destination
-    @app_json_path = "#{destination_root}/app.json"
-    File.write(@app_json_path, ActiveSupport::JSON.encode({
-      buildpacks: []
-    }))
   end
 
   test 'pdf job template is created' do
@@ -26,6 +22,13 @@ class InstallGeneratorTest < Rails::Generators::TestCase
   end
 
   test 'app.json is created' do
+    @app_json_path = "#{destination_root}/app.json"
+
+    File.write(@app_json_path, ActiveSupport::JSON.encode({}))
+    run_generator
+    assert_includes(File.read(@app_json_path), 'heroku-community/chrome-for-testing')
+
+    File.write(@app_json_path, ActiveSupport::JSON.encode({ buildpacks: [] }))
     run_generator
     assert_includes(File.read(@app_json_path), 'heroku-community/chrome-for-testing')
   end
