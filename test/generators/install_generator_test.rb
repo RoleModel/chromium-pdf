@@ -7,7 +7,13 @@ require 'lib/generators/chromium/pdf/install/install_generator'
 class InstallGeneratorTest < Rails::Generators::TestCase
   tests ::Chromium::Pdf::Generators::InstallGenerator
   destination File.expand_path('../../tmp', __dir__)
-  setup :prepare_destination
+  setup do
+    prepare_destination
+    @app_json_path = "#{destination_root}/app.json"
+    File.write(@app_json_path, ActiveSupport::JSON.encode({
+      buildpacks: []
+    }))
+  end
 
   test 'pdf job template is created' do
     run_generator
@@ -21,6 +27,6 @@ class InstallGeneratorTest < Rails::Generators::TestCase
 
   test 'app.json is created' do
     run_generator
-    assert_file 'app.json'
+    assert_includes(File.read(@app_json_path), 'heroku-community/chrome-for-testing')
   end
 end

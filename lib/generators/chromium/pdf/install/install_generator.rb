@@ -17,11 +17,27 @@ module Chromium
 
         def include_chrome_buildpack_in_app_json
           say(<<~SAY, :yellow)
-            N.B. app.json changes are not applied to existing heroku apps.
+            N.B. app.json changes are only applied to new heroku apps.
             In the case where your app already exists make sure to manually add the buildpack by running the command:
             `heroku buildpacks:add heroku-community/chrome-for-testing`
           SAY
-          copy_file 'app.json'
+          add_buildpack_to_app_json
+        end
+
+        private
+
+        def add_buildpack_to_app_json
+          in_root do
+            update_json_file('app.json') do |data|
+              data['buildpacks'] << { 'url' => 'heroku-community/chrome-for-testing' }
+            end
+          end
+        end
+
+        def update_json_file(file_name)
+          data = ActiveSupport::JSON.decode(File.read(file_name))
+          yield data
+          File.write(file_name, ActiveSupport::JSON.encode(data))
         end
       end
     end
