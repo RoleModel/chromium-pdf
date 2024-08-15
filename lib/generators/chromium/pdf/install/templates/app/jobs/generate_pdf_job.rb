@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GenerateReportPdfJob < ApplicationJob
+class GeneratePdfJob < ApplicationJob
   JobTimeoutError = Class.new(StandardError)
   include GoodJob::ActiveJobExtensions::Concurrency
   include Chromium::Pdf
@@ -12,7 +12,7 @@ class GenerateReportPdfJob < ApplicationJob
   good_job_control_concurrency_with(
     enqueue_limit: 1,
     perform_limit: 1,
-    key: -> { "generate_report_pdf_#{arguments.first.id}" }
+    key: arguments.first.id
   )
 
   around_perform do |_job, block|
