@@ -29,7 +29,9 @@ module Chromium
         def add_buildpack_to_app_json
           in_root do
             update_json_file('app.json') do |data|
-              data['buildpacks'] << { 'url' => 'heroku-community/chrome-for-testing' }
+              if data['buildpacks'].none? { |entry| entry['url'] == 'heroku-community/chrome-for-testing' }
+                data['buildpacks'] << { 'url' => 'heroku-community/chrome-for-testing' }
+              end
             end
           end
         end
