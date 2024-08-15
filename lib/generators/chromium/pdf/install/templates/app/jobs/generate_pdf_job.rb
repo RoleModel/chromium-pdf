@@ -28,7 +28,6 @@ class GeneratePdfJob < ApplicationJob
     generate_pdf!(model.filename, model.print_url) do |file, filename|
       # What to do with the generated file
       model.attachment.attach(io: File.open(file.path), filename: filename, content_type: 'application/pdf')
-      model.save
     end
   end
 end
