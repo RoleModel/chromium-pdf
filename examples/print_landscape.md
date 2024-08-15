@@ -23,7 +23,7 @@ This class can then be added conditionally to the body of the application view:
   body.app-body class="#{'print-landscape' if @print_landscape}"
     = turbo_frame_tag 'modal'
     = render 'confirm'
-    ...
+    /...
 ```
 
 And this can then be controlled by passing the `@print_landscape` variable from any controller.
