@@ -18,4 +18,9 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     run_generator
     assert_file 'config/initializers/good_job.rb'
   end
+
+  test 'app.json is created' do
+    run_generator
+    assert_file 'app.json'
+  end
 end

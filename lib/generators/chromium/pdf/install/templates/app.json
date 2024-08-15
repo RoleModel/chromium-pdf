@@ -1,0 +1,17 @@
+{
+    "buildpacks": [
+      {
+        "url":"heroku-community/chrome-for-testing"
+      },
+      {
+        "url":"heroku/metrics"
+      },
+      {
+        "url": "heroku/nodejs"
+      },
+      {
+        "url": "heroku/ruby"
+      }
+    ]
+  }
+  

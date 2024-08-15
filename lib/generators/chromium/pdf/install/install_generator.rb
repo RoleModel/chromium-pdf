@@ -14,6 +14,15 @@ module Chromium
           copy_file 'app/jobs/generate_pdf_job.rb'
           copy_file 'config/initializers/good_job.rb'
         end
+
+        def include_chrome_buildpack_in_app_json
+          say(<<~SAY, :yellow)
+            N.B. app.json changes are not applied to existing heroku apps.
+            In the case where your app already exists make sure to manually add the buildpack by running the command:
+            `heroku buildpacks:add heroku-community/chrome-for-testing`
+          SAY
+          copy_file 'app.json'
+        end
       end
     end
   end
