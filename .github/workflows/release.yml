@@ -1,5 +1,10 @@
 name: Release to RubyGems.org
 
+on:
+  workflow_dispatch:
+
+concurrency: gem-release
+
 jobs:
   build:
     runs-on: ubuntu-latest
