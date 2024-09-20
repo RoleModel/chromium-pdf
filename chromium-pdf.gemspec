@@ -18,8 +18,6 @@ Gem::Specification.new do |spec|
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.' unless spec.respond_to?(:metadata)
 
-  spec.metadata['allowed_push_host'] = "Set to 'http://mygemserver.com'"
-
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/RoleModel/chromium-pdf'
   spec.metadata['changelog_uri'] = 'https://github.com/RoleModel/chromium-pdf/blob/main/CHANGELOG.md'
