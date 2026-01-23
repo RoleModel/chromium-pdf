@@ -17,11 +17,24 @@ class Chromium::TestPdf < Minitest::Test
 
   def test_chrome_print_calls_file_open
     job = TestGeneratePdfJob.new
-    File.stub :open, :ran do
-      result = job.send(:chrome_print, 'chrome', 'url', 'name', 'path', ['argument']) do |_file, filename|
-        assert_equal 'name', filename
+    Kernel.stub :system, true do
+      File.stub :open, :ran do
+        result = job.send(:chrome_print, 'chrome', 'url', 'name', 'path', ['argument']) do |_file, filename|
+          assert_equal 'name', filename
+        end
+        assert_equal :ran, result
       end
-      assert_equal :ran, result
+    end
+  end
+
+  def test_generate_pdf_yields_to_block
+    job = TestGeneratePdfJob.new
+    Kernel.stub :system, true do
+      File.stub :open, :ran do
+        job.generate_pdf!('filename', 'url') do |_file, filename|
+          assert_equal 'filename', filename
+        end
+      end
     end
   end
 end
