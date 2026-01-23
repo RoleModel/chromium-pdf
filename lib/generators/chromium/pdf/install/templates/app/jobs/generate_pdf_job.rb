@@ -12,7 +12,7 @@ class GeneratePdfJob < ApplicationJob
   good_job_control_concurrency_with(
     enqueue_limit: 1,
     perform_limit: 1,
-    key: arguments.first.id
+    key: -> { "generate_pdf_#{arguments.first.id}" }
   )
 
   around_perform do |_job, block|
