@@ -6,4 +6,8 @@ class TestGeneratePdfJob
   def perform(filename, url)
     generate_pdf!(filename, url)
   end
+
+  def file_created?(...)
+    true
+  end
 end
