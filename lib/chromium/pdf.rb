@@ -38,10 +38,15 @@ module Chromium
 
     def chrome_print(chrome_path, print_url, filename, filepath, arguments, &block)
       Kernel.system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url}")
+      sleep 0.1 until file_created?(filepath)
 
       File.open(filepath) do |file|
         block&.call(file, filename)
       end
+    end
+
+    def file_created?(filepath)
+      File.exist?(filepath) && File.size(filepath).positive?
     end
   end
 end
