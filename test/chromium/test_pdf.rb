@@ -19,7 +19,7 @@ class Chromium::TestPdf < Minitest::Test
     job = TestGeneratePdfJob.new
     Kernel.stub :system, true do
       File.stub :open, :ran do
-        result = job.send(:chrome_print, 'chrome', 'url', 'name', 'path', ['argument']) do |_file, filename|
+        result = job.send(:chrome_print, 'url', 'name', 'path', ['argument']) do |_file, filename|
           assert_equal 'name', filename
         end
         assert_equal :ran, result

@@ -25,18 +25,18 @@ module Chromium
     # @yield [file, filename] Yields the file object and the filename to the block.
     #
     def generate_pdf!(unescaped_filename, print_url, arguments: DEFAULT_CHROME_ARGUMENTS, &block)
-      chrome_path = ENV.fetch('GOOGLE_CHROME_BIN', nil)
       filename = unescaped_filename.gsub('&', 'and')
 
       Dir.mktmpdir do |path|
         filepath = "#{path}/#{filename}"
-        chrome_print chrome_path, print_url, filename, filepath, arguments, &block
+        chrome_print(print_url, filename, filepath, arguments, &block)
       end
     end
 
     protected
 
-    def chrome_print(chrome_path, print_url, filename, filepath, arguments, &block)
+    def chrome_print(print_url, filename, filepath, arguments, &block)
+      chrome_path = ENV.fetch('GOOGLE_CHROME_BIN', 'chrome')
       Kernel.system("LD_PRELOAD='' #{chrome_path} --print-to-pdf='#{filepath}' #{arguments.join(' ')} #{print_url}")
       sleep 0.1 until file_created?(filepath)
 
