@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class GeneratePdfJob < ApplicationJob
-  JobTimeoutError = Class.new(StandardError)
+  class JobTimeoutError < StandardError
+  end
   include GoodJob::ActiveJobExtensions::Concurrency
   include Chromium::Pdf
 
@@ -16,9 +17,7 @@ class GeneratePdfJob < ApplicationJob
   )
 
   around_perform do |_job, block|
-    Timeout.timeout(180.seconds, JobTimeoutError) do
-      block.call
-    end
+    Timeout.timeout(180.seconds, JobTimeoutError, &block)
   end
 
   def perform(model)
