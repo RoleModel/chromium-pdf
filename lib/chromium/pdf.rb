@@ -29,7 +29,8 @@ module Chromium
 
       Dir.mktmpdir do |path|
         filepath = "#{path}/#{filename}"
-        chrome_print(print_url, filepath, arguments)
+        chrome_print!(print_url, filepath, arguments)
+
         File.open(filepath) do |file|
           block&.call(file, filename)
         end
@@ -38,17 +39,16 @@ module Chromium
 
     protected
 
-    def chrome_print(print_url, pdf_path, arguments)
+    def chrome_print!(print_url, pdf_path, arguments)
       chrome_path = ENV.fetch('GOOGLE_CHROME_BIN', 'chrome')
       Kernel.system(
         { 'LD_PRELOAD' => '' },
         chrome_path,
-        "--print-to-pdf=#{pdf_path}",
         *arguments,
-        print_url
+        "--print-to-pdf=#{pdf_path}",
+        print_url,
+        exception: true
       )
-
-      sleep 0.1 until file_created?(pdf_path)
     end
 
     def file_created?(filepath)

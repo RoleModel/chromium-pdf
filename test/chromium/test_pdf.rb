@@ -28,7 +28,6 @@ class Chromium::TestPdf < Minitest::Test
       expected_args = [
         { 'LD_PRELOAD' => '' },
         'chrome',
-        '--print-to-pdf=test/tmp/file.pdf',
         '--headless',
         '--disable-gpu',
         '--no-pdf-header-footer',
@@ -36,7 +35,9 @@ class Chromium::TestPdf < Minitest::Test
         '--no-sandbox',
         '--disable-dev-shm-usage',
         '--disable-background-networking',
-        'http://example.com'
+        '--print-to-pdf=test/tmp/file.pdf',
+        'http://example.com',
+        exception: true
       ]
 
       assert_equal expected_args, args_seen
