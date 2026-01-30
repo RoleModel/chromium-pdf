@@ -1,40 +1,60 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'test/jobs/test_generate_pdf_job'
 
 class Chromium::TestPdf < Minitest::Test
+  TMP_PATH = 'test/tmp'
+
+  def setup
+    @job = Class.new do
+      include Chromium::Pdf
+    end.new
+  end
+
   def test_job_includes_pdf_concern
-    assert_respond_to TestGeneratePdfJob.new, :generate_pdf!
+    assert_respond_to @job, :generate_pdf!
   end
 
-  def test_generate_pdf_calls_chrome_print
-    job = TestGeneratePdfJob.new
-    job.stub :chrome_print, :ran do
-      assert_equal :ran, job.generate_pdf!('filename', 'url')
-    end
-  end
-
-  def test_chrome_print_calls_file_open
-    job = TestGeneratePdfJob.new
-    Kernel.stub :system, true do
-      File.stub :open, :ran do
-        result = job.send(:chrome_print, 'url', 'name', 'path', ['argument']) do |_file, filename|
-          assert_equal 'name', filename
-        end
-        assert_equal :ran, result
+  def test_generate_pdf_calls_executes_correct_chrome_command
+    with_tmp_dir do
+      args_seen = nil
+      Kernel.stub(:system, lambda { |*args|
+        args_seen = args
+        true
+      }) do
+        @job.generate_pdf!('file.pdf', 'http://example.com')
       end
+
+      expected_args = [
+        { 'LD_PRELOAD' => '' },
+        'chrome',
+        '--print-to-pdf=test/tmp/file.pdf',
+        '--headless',
+        '--disable-gpu',
+        '--no-pdf-header-footer',
+        '--run-all-compositor-stages-before-draw',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-background-networking',
+        'http://example.com'
+      ]
+
+      assert_equal expected_args, args_seen
     end
   end
 
   def test_generate_pdf_yields_to_block
-    job = TestGeneratePdfJob.new
-    Kernel.stub :system, true do
-      File.stub :open, :ran do
-        job.generate_pdf!('filename', 'url') do |_file, filename|
-          assert_equal 'filename', filename
+    with_tmp_dir do
+      Kernel.stub :system, :ran do
+        @job.generate_pdf!('file.pdf', 'url') do |file, filename|
+          assert_equal "hello world\n", file.read
+          assert_equal 'file.pdf', filename
         end
       end
     end
+  end
+
+  def with_tmp_dir(&with_block)
+    Dir.stub(:mktmpdir, ->(*_args, &block) { block.call(TMP_PATH) }, &with_block)
   end
 end
