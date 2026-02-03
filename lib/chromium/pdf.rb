@@ -50,9 +50,5 @@ module Chromium
         exception: true
       )
     end
-
-    def file_created?(filepath)
-      File.exist?(filepath) && File.size(filepath).positive?
-    end
   end
 end
