@@ -15,7 +15,7 @@ class Chromium::TestPdf < Minitest::Test
     assert_respond_to @job, :generate_pdf!
   end
 
-  def test_generate_pdf_calls_executes_correct_chrome_command
+  def test_generate_pdf_calls_executes_correct_chrome_command # rubocop:disable Metrics/MethodLength
     with_tmp_dir do
       args_seen = nil
       Kernel.stub(:system, lambda { |*args|
