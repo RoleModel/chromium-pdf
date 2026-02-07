@@ -3,6 +3,7 @@
 require_relative 'railtie' if defined?(Rails::Railtie)
 require_relative 'pdf/version'
 require 'active_support/concern'
+require 'open3'
 
 module Chromium
   module Pdf
@@ -40,16 +41,20 @@ module Chromium
 
     protected
 
+    def logger
+      @logger ||= defined?(Rails) && Rails.respond_to?(:logger) ? Rails.logger : Logger.new($stdout)
+    end
+
     def chrome_print!(print_url, pdf_path, arguments)
       chrome_path = ENV.fetch('GOOGLE_CHROME_BIN', 'chrome')
-      Kernel.system(
-        { 'LD_PRELOAD' => '' },
-        chrome_path,
-        *arguments,
-        "--print-to-pdf=#{pdf_path}",
-        print_url,
-        exception: true
-      )
+
+      cmd = [chrome_path, *arguments, "--print-to-pdf=#{pdf_path}", print_url]
+
+      Open3.popen2e({ 'LD_PRELOAD' => '' }, *cmd) do |_stdin, stdout_stderr, _wait_thread|
+        stdout_stderr.each_line do |line|
+          logger.info(line.chomp)
+        end
+      end
     end
   end
 end
