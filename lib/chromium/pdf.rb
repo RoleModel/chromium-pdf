@@ -15,7 +15,8 @@ module Chromium
       '--run-all-compositor-stages-before-draw',
       '--no-sandbox',
       '--disable-dev-shm-usage',
-      '--disable-background-networking'
+      '--disable-background-networking',
+      '--virtual-time-budget=10000'
     ].freeze
 
     ##

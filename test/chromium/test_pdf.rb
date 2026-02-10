@@ -35,6 +35,7 @@ class Chromium::TestPdf < Minitest::Test
         '--no-sandbox',
         '--disable-dev-shm-usage',
         '--disable-background-networking',
+        '--virtual-time-budget=10000',
         '--print-to-pdf=test/tmp/file.pdf',
         'http://example.com',
         exception: true
