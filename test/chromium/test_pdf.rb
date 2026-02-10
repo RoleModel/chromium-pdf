@@ -17,16 +17,23 @@ class Chromium::TestPdf < Minitest::Test
 
   def test_generate_pdf_calls_executes_correct_chrome_command # rubocop:disable Metrics/MethodLength
     with_tmp_dir do
-      args_seen = nil
-      Kernel.stub(:system, lambda { |*args|
-        args_seen = args
-        true
+      env_seen = nil
+      cmd_seen = nil
+
+      Open3.stub(:popen2e, lambda { |env, *cmd|
+        env_seen = env
+        cmd_seen = cmd
+        # Return a mock that yields a StringIO with output
+        mock_io = StringIO.new("Chrome output\n")
+        mock_status = Struct.new(:success?).new(true)
+        mock_wait_thr = Struct.new(:value).new(mock_status)
+        yield nil, mock_io, mock_wait_thr
       }) do
         @job.generate_pdf!('file.pdf', 'http://example.com')
       end
 
-      expected_args = [
-        { 'LD_PRELOAD' => '' },
+      expected_env = { 'LD_PRELOAD' => '' }
+      expected_cmd = [
         'chrome',
         '--headless',
         '--disable-gpu',
@@ -37,17 +44,22 @@ class Chromium::TestPdf < Minitest::Test
         '--disable-background-networking',
         '--virtual-time-budget=10000',
         '--print-to-pdf=test/tmp/file.pdf',
-        'http://example.com',
-        exception: true
+        'http://example.com'
       ]
 
-      assert_equal expected_args, args_seen
+      assert_equal expected_env, env_seen
+      assert_equal expected_cmd, cmd_seen
     end
   end
 
   def test_generate_pdf_yields_to_block
     with_tmp_dir do
-      Kernel.stub :system, :ran do
+      Open3.stub(:popen2e, lambda { |_env, *_cmd|
+        mock_io = StringIO.new("Chrome output\n")
+        mock_status = Struct.new(:success?).new(true)
+        mock_wait_thr = Struct.new(:value).new(mock_status)
+        yield nil, mock_io, mock_wait_thr
+      }) do
         @job.generate_pdf!('file.pdf', 'url') do |file, filename|
           assert_equal "hello world\n", file.read
           assert_equal 'file.pdf', filename
